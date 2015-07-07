@@ -30,6 +30,7 @@
         "src/common/DayGrid.events.js",
         "src/common/DayGrid.limit.js",
         "src/common/TimeGrid.js",
+        "src/common/MultiTimeGrid.js",
         "src/common/TimeGrid.events.js",
         "src/common/View.js",
         "src/Calendar.js",
@@ -41,6 +42,7 @@
         "src/basic/MonthView.js",
         "src/basic/config.js",
         "src/agenda/AgendaView.js",
+        "src/agenda/MultiAgendaView.js",
         "src/agenda/config.js",
         "src/outro.js"
       ],

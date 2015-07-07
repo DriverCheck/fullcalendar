@@ -44,14 +44,16 @@ module.exports = function(grunt) {
 		'modules',
 		'languages',
 		'karma:single',
-		'archiveDist'
+		'archiveDist',
+		'copyToApp'
 	]);
 
 	// Bare minimum for debugging
 	grunt.registerTask('dev', [
 		'shell:assume-unchanged',
 		'lumbar:build',
-		'languages'
+		'languages',
+		'copyToApp'
 	]);
 
 
@@ -198,6 +200,11 @@ module.exports = function(grunt) {
 		'compress:archive'
 	]);
 
+	grunt.registerTask('copyToApp', [
+		'copy:copyToCalendarApp',
+		'copy:copyToCalendarAppMinified'
+	]);
+
 	// copy FullCalendar modules into ./fullcalendar/ directory
 	config.copy.archiveModules = {
 		expand: true,
@@ -277,6 +284,17 @@ module.exports = function(grunt) {
 			'build/temp/archive/license.txt': 'license.txt',
 			'build/temp/archive/changelog.txt': 'changelog.md'
 		}
+	};
+
+	// copy build file to calendar app
+	config.copy.copyToCalendarApp = {
+		src:'dist/fullcalendar.js',
+		dest:'calendar_libs/fullcalendar.js'
+	};
+		// copy build file to calendar app
+	config.copy.copyToCalendarAppMinified = {
+		src:'dist/fullcalendar.min.js',
+		dest:'calendar_libs/min/fullcalendar.min.js'
 	};
 
 	// create the ZIP
