@@ -53,6 +53,10 @@ var MultiAgendaView = fc.MultiAgendaView = AgendaView.extend({
 				}
 			};
 		}
+	},
+
+	triggerSelect:function(range, ev){
+		this.trigger('select', null, range.start, range.end, ev, range.customProperty);
 	}
 
 });	

@@ -62,6 +62,21 @@ var MultiTimeGrid = fc.MultiTimeGrid = TimeGrid.extend({
 		this.rowCnt = Math.ceil((this.maxTime - this.minTime) / this.snapDuration); // # of vertical snaps
 	},
 
+	selectionRangeToSegs:function(range){
+		return this.rangeToSegs(range);
+	},
+
+	computeSelection:function(firstCell, lastCell){
+		var range = TimeGrid.prototype.computeSelection.apply(this, arguments);
+		if($.isArray(this.customColumns) && this.customColumns.length > 0){
+			if($.isPlainObject(firstCell) && $.isPlainObject(this.customColumns[firstCell.col])){
+				range.constrainCol = firstCell.col;
+				range.customProperty = this.customColumns[firstCell.col];
+			}
+		}
+		return range;
+	},
+
 	// Slices up a date range by column into an array of segments
 	rangeToSegs: function(range) {
 		var colCnt = this.colCnt;
@@ -70,6 +85,10 @@ var MultiTimeGrid = fc.MultiTimeGrid = TimeGrid.extend({
 		var col;
 		var colDate;
 		var colRange;
+		var constrainColumn;
+		if($.isPlainObject(range) && range.constrainCol !== undefined){
+			constrainColumn = range.constrainCol;
+		}
 
 		// normalize :(
 		range = {
@@ -93,7 +112,9 @@ var MultiTimeGrid = fc.MultiTimeGrid = TimeGrid.extend({
 			seg = intersectionToSeg(range, colRange); // both will be ambig timezone
 			if (seg) {
 				seg.col = col;
-				segs.push(seg);
+				if(constrainColumn === undefined || col == constrainColumn){
+					segs.push(seg);
+				}
 			}
 		}
 
