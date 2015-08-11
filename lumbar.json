@@ -43,6 +43,7 @@
         "src/basic/config.js",
         "src/agenda/AgendaView.js",
         "src/agenda/MultiAgendaView.js",
+        "src/agenda/OpenHoursView.js",
         "src/agenda/config.js",
         "src/outro.js"
       ],

@@ -2,11 +2,12 @@
 /* A subclass of AgendaView, it displays an arbitrary number of "agendaDay" views side by side
 ----------------------------------------------------------------------------------------------------------------------*/
 
-var MultiAgendaView = fc.MultiAgendaView = AgendaView.extend({
+var OpenHoursView = fc.OpenHoursView = AgendaView.extend({
+
 
 	initialize: function() {
 		this.timeGrid = new MultiTimeGrid(this);
-		this.timeGrid.setCustomProperty("staff");
+		this.timeGrid.setCustomProperty("day");
 
 		if (this.opt('allDaySlot')) { // should we display the "all-day" area?
 			this.dayGrid = new DayGrid(this); // the all-day subcomponent of this view
@@ -20,10 +21,19 @@ var MultiAgendaView = fc.MultiAgendaView = AgendaView.extend({
 		else {
 			this.coordMap = this.timeGrid.coordMap;
 		}
+
+		this.setColumns([
+			{id:"sun_hours", name:"Sunday"},
+			{id:"mon_hours", name:"Monday"},
+			{id:"tue_hours", name:"Tuesday"},
+			{id:"wed_hours", name:"Wednesday"},
+			{id:"thu_hours", name:"Thursday"},
+			{id:"fri_hours", name:"Friday"},
+			{id:"sat_hours", name:"Saturday"}
+		], false);
 	},
 
 	renderEvents:function(events){
-		//this.calculateColumns(events);
 		this.lastEvents = events;
 		this.timeGrid.setCustomColumns(this.columns, this.columnMap);
 		this.timeGrid.rangeUpdated();
@@ -38,10 +48,14 @@ var MultiAgendaView = fc.MultiAgendaView = AgendaView.extend({
 	},
 
 	updateTitle:function(){
-		this.title = "Multi " + this.computeTitle();
+		this.title = "Hours of Operation";
 	},
 
-	setColumns:function(columns){
+	setColumns:function(columns, doRedraw){
+		if(doRedraw === undefined){
+			doRedraw = true;
+		}
+
 		this.columns = [];
 		this.columnMap = {};
 		if($.isArray(columns) && columns.length > 0){
@@ -53,30 +67,11 @@ var MultiAgendaView = fc.MultiAgendaView = AgendaView.extend({
 				}
 			};
 		}
-		this.reDraw();
-	},
-
-	calculateColumns:function(events){
-		this.columns = [];
-		this.columnMap = {};
-		if($.isArray(events) && events.length > 0){
-			for (var i = events.length - 1; i >= 0; i--) {
-				var ev = events[i];
-				if($.isPlainObject(ev) && $.isPlainObject(ev.rawEvent)){
-					var staff;
-					if($.isPlainObject(ev.rawEvent.staff)){
-						staff = ev.rawEvent.staff;
-					}else{
-						staff = {id:"~NULL~", name:"Unassigned Events"};
-					}
-					if(!this.columnMap.hasOwnProperty(staff.id)){
-						this.columns.push(staff);
-						this.columnMap[staff.id] = staff;
-					}
-				}
-			};
+		if(doRedraw == true){
+			this.reDraw();
 		}
 	},
+
 
 	triggerSelect:function(range, ev){
 		this.trigger('select', null, range.start, range.end, ev, range.customProperty);

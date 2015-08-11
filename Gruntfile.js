@@ -43,7 +43,7 @@ module.exports = function(grunt) {
 		'clean',
 		'modules',
 		'languages',
-		'karma:single',
+		//'karma:single',
 		'archiveDist',
 		'copyToApp'
 	]);
@@ -396,7 +396,7 @@ module.exports = function(grunt) {
 
 	/* Linting and Code Style Checking
 	----------------------------------------------------------------------------------------------------*/
-
+	
 	grunt.registerTask('check', 'Lint and check code style', [
 		'jscs',
 		'jshint:srcModules', // so we can fix most quality errors in their original files

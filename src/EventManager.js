@@ -893,11 +893,32 @@ function EventManager(options) { // assumed to be a calendar
 				eventInput.end = null;
 			}
 
-			return expandEvent(
-				buildEventFromInput(eventInput),
-				view.start,
-				view.end
-			);
+			// OFR: Modified to support an array of objects instead of a repeating object
+			if($.isArray(optionVal)){
+				var daysArray = [];
+				for (var i = 0; i < optionVal.length; i++) {
+					var dayInput = optionVal[i];
+					var dayEventInput = $.extend(
+						{}, // copy to a new object in either case
+						defaultVal,
+						typeof dayInput === 'object' ? dayInput : {} // override the defaults
+					);
+					var dayEvent = buildEventFromInput(dayEventInput);
+					var expandedEvent = expandEvent(dayEvent, view.start, view.end);
+					for (var j = expandedEvent.length - 1; j >= 0; j--) {
+						daysArray.push(expandedEvent[j]);
+					};
+				};
+				return daysArray;
+
+			// This is the native behaviour, still supported if passing a plain object instead of an array
+			}else {
+				return expandEvent(
+					buildEventFromInput(eventInput),
+					view.start,
+					view.end
+				);
+			}
 		}
 
 		return [];
