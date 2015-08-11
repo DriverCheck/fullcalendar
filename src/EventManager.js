@@ -893,7 +893,21 @@ function EventManager(options) { // assumed to be a calendar
 				eventInput.end = null;
 			}
 
-			// OFR: Modified to support an array of objects instead of a repeating object
+			/* OFR: Modified to support an array of objects instead of a repeating object
+			  * e.g.:
+			  *   [
+			  *     {dow:[0], start:'9:00', end:'17:00', _id:"bizHrs"},
+			  *     {dow:[1], start:'8:00', end:'12:00', _id:"bizHrs"},
+			  *     {dow:[1], start:'14:00', end:'17:00', _id:"bizHrs"},
+			  *     {dow:[2], start:'8:00', end:'12:00', _id:"bizHrs"},
+			  *     {dow:[3], start:'8:00', end:'12:00', _id:"bizHrs"},
+			  *     {dow:[4], start:'8:00', end:'12:00', _id:"bizHrs"},
+			  *     {dow:[5], start:'8:00', end:'12:00', _id:"bizHrs"},
+			  *     {dow:[6], start:'9:00', end:'22:00', _id:"bizHrs"}
+			  *   ]
+			  *
+			  * the _id is required to group the events by id
+			**/			
 			if($.isArray(optionVal)){
 				var daysArray = [];
 				for (var i = 0; i < optionVal.length; i++) {
