@@ -48,7 +48,11 @@ var OpenHoursView = fc.OpenHoursView = AgendaView.extend({
 	},
 
 	updateTitle:function(){
-		this.title = "Hours of Operation";
+		if(this.opt("title")){
+			this.title = this.opt("title");
+		}else{
+			this.title = "Hours of Operation";
+		}
 	},
 
 	setColumns:function(columns, doRedraw){
